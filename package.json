@@ -1,0 +1,22 @@
+{
+  "name": "html-skeleton-gulp",
+  "version": "1.0.0",
+  "description": "gulp+less+html starter template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deicer/deicer-html-skeleton-gulp.git"
+  },
+  "keywords": [
+    "gulp"
+  ],
+  "author": "deicer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deicer/deicer-html-skeleton-gulp/issues"
+  },
+  "homepage": "https://github.com/deicer/deicer-html-skeleton-gulp#readme"
+}

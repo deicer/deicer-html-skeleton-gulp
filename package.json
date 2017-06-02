@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/deicer/deicer-html-skeleton-gulp/issues"
   },
-  "homepage": "https://github.com/deicer/deicer-html-skeleton-gulp#readme"
+  "homepage": "https://github.com/deicer/deicer-html-skeleton-gulp#readme",
+  "dependencies": {
+    "gulp-if": "^2.0.2",
+    "path": "^0.12.7",
+    "yargs": "^8.0.1"
+  }
 }

@@ -25,6 +25,7 @@ var gulp         = require('gulp'),                         // gulp
     uglify       = require('gulp-uglify'),                  // Минификация JavaScript
 
     // Работа с HTML
+    htmlmin      = require('gulp-htmlmin'),                 // Минификация HTML
     pug          = require('gulp-pug'),                     // Шаблонизатор pug (jade)
 
     // Работа с CSS
@@ -59,7 +60,7 @@ var gulp         = require('gulp'),                         // gulp
             gutil.beep();
             this.emit('end');
         }
-    }
+    };
 /* ===================================== */
 
 
@@ -71,10 +72,12 @@ var gulp         = require('gulp'),                         // gulp
     // Если gulp запущен с ключом production, включаем минификацию
     if (production) {
             cfg.compress = {
+                html: false,  // !!! Внимание для production html-минификация тоже отключена, включить если нужно !!!
                 css: true,
                 js:  true,
                 img: true
-            }
+            };
+            cfg.pug.pretty=false; // !!! Внимание для production html-минификация у pug тоже отключена.
     }
 /* ===================================== */
 
@@ -104,11 +107,12 @@ var gulp         = require('gulp'),                         // gulp
 // Сборка HTML
 gulp.task('html', function () {
     console.log('---------- Сборка HTML');
-    return gulp.src(cfg.paths.src.html)             // Выбираем файлы по нужному пути
-        .pipe(plumber(err))                         // Отслеживаем ошибки
-        .pipe(rigger())                             // Обьединяем HTML через rigger
-        .pipe(gulp.dest(cfg.paths.build.html))      // Копируем в папку назначения
-        .pipe(reload({stream: true}));              // Перезагружаем сервер
+    return gulp.src(cfg.paths.src.html)                         // Выбираем файлы по нужному пути
+        .pipe(plumber(err))                                     // Отслеживаем ошибки
+        .pipe(rigger())                                         // Обьединяем HTML через rigger
+        .pipe(gulpif(cfg.compress.html,htmlmin(cfg.htmlmin)))   // Минифицируем HTML если нужно (см. настройки)
+        .pipe(gulp.dest(cfg.paths.build.html))                  // Копируем в папку назначения
+        .pipe(reload({stream: true}));                          // Перезагружаем сервер
 });
 /* ===================================== */
 
@@ -117,12 +121,11 @@ gulp.task('html', function () {
 // Компиляция pug/jade шаблонов
 gulp.task('pug', function () {
     console.log('---------- Компиляция pug/jade шаблонов');
-    return gulp.src(cfg.paths.src.pug)             // Выбираем файлы по нужному пути
-        .pipe(plumber(err))                         // Отслеживаем ошибки
-        .pipe (pug(cfg.pug.pretty))
-        .pipe(rigger())                             // Обьединяем HTML через rigger
-        .pipe(gulp.dest(cfg.paths.build.html))      // Копируем в папку назначения
-        .pipe(reload({stream: true}));              // Перезагружаем сервер
+    return gulp.src(cfg.paths.src.pug)                          // Выбираем файлы по нужному пути
+        .pipe(plumber(err))                                     // Отслеживаем ошибки
+        .pipe (pug(cfg.pug))                                    // Компилируем pug-шаблоны
+        .pipe(gulp.dest(cfg.paths.build.html))                  // Копируем в папку назначения
+        .pipe(reload({stream: true}));                          // Перезагружаем сервер
 });
 /* ===================================== */
 

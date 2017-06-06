@@ -61,3 +61,14 @@ var gulp         = require('gulp'),                         // gulp
 
     // Узнаем какая конфигуцация (dev или production)
     var production = argv.production;
+
+    // Если gulp запущен с ключом production, включаем минификацию
+    if (production) {
+            cfg.compress = {
+                css: true,
+                js:  true,
+                img: true
+            }
+    }
+
+

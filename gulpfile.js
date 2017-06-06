@@ -2,16 +2,17 @@
 
 /* ===== ПОДКЛЮЧЕНИЕ ПЛАГИНОВ ===== */
 
-var gulp         = require('gulp'),                          // gulp
+var gulp         = require('gulp'),                         // gulp
 
     // Общие плагины gulp
     argv         = require('yargs').argv,                   // Разбор опций командной строки gulp
     gulpif       = require('gulp-if'),                      // Управление потоками выполнения gulp
     plumber      = require('gulp-plumber'),                 // Перехват ошибок
     browserSync  = require('browser-sync'),                 // Автоперезагрузка браузера
+    gutil        = require('gulp-util'),                    // Различные вспомогательные утилиты
 
     // Работа с файлами
-    path         = require('path'),                         // Модуль Node для работы с файловыми путями
+    pathplug     = require('path'),                         // Модуль Node для работы с файловыми путями
     watch        = require('gulp-watch'),                   // Отслеживание изменений в файлах проекта
     del          = require('del'),                          // Удаление файлов и папок
     rigger	     = require('gulp-rigger'),                  // Плагин позволяет импортировать один файл в другой
@@ -40,5 +41,23 @@ var gulp         = require('gulp'),                          // gulp
     // Развертывание проекта (FTP, Github и т.п.)
     ftp          = require('vinyl-ftp'),                    // Работа с FTP
 
+    // Загрузка кофигурации gulp
+    cgf          = require('./config');
 
 
+/* ========= ПЕРЕМЕННЫЕ =========== */
+
+    // Перезагрузка сервера
+    var reload = browserSync.reload;
+
+    // Перехват ошибок
+    var err = {
+        errorHandler: function (error) {
+            gutil.log('Error: ' + error.message);
+            gutil.beep();
+            this.emit('end');
+        }
+    }
+
+    // Узнаем какая конфигуцация (dev или production)
+    var production = argv.production;

@@ -1,6 +1,6 @@
 'use strict';
 
-/* ===== ПОДКЛЮЧЕНИЕ ПЛАГИНОВ ===== */
+/* ======== ПОДКЛЮЧЕНИЕ ПЛАГИНОВ ======== */
 
 var gulp         = require('gulp'),                         // gulp
 
@@ -12,7 +12,7 @@ var gulp         = require('gulp'),                         // gulp
     gutil        = require('gulp-util'),                    // Различные вспомогательные утилиты
 
     // Работа с файлами
-    pathplug     = require('path'),                         // Модуль Node для работы с файловыми путями
+    path         = require('path'),                         // Модуль Node для работы с файловыми путями
     watch        = require('gulp-watch'),                   // Отслеживание изменений в файлах проекта
     del          = require('del'),                          // Удаление файлов и папок
     rigger	     = require('gulp-rigger'),                  // Плагин позволяет импортировать один файл в другой
@@ -39,13 +39,15 @@ var gulp         = require('gulp'),                         // gulp
     pngquant     = require('imagemin-pngquant'),            // Оптимизация PNG изображений
 
     // Развертывание проекта (FTP, Github и т.п.)
-    ftp          = require('vinyl-ftp'),                    // Работа с FTP
+    ftp          = require('vinyl-ftp');                    // Работа с FTP
 
-    // Загрузка кофигурации gulp
-    cgf          = require('./config');
+/* ===================================== */
 
 
-/* ========= ПЕРЕМЕННЫЕ =========== */
+/* ============= ПЕРЕМЕННЫЕ ============ */
+
+    // Загрузка кофигурации проекта
+    var cfg          = require('./config');
 
     // Перезагрузка сервера
     var reload = browserSync.reload;
@@ -58,6 +60,10 @@ var gulp         = require('gulp'),                         // gulp
             this.emit('end');
         }
     }
+/* ===================================== */
+
+
+/* ============ PRODUCTION? ============ */
 
     // Узнаем какая конфигуцация (dev или production)
     var production = argv.production;
@@ -70,5 +76,54 @@ var gulp         = require('gulp'),                         // gulp
                 img: true
             }
     }
+/* ===================================== */
+
+
+/* =========== ТАСК "CLEAN" ============ */
+
+    // Удаление папки сборки
+    gulp.task('clean', function() {
+        console.log('---------- Очистка папки сборки');
+        return del.sync(cfg.paths.clean);
+    });
+/* ===================================== */
+
+
+/* ======== ТАСК "SERVER" ======== */
+
+    //Запускаем локальный сервер
+    gulp.task('server', function() {
+        console.log('---------- Запуск локального сервера');
+        browserSync(cfg.browserSync);
+    });
+/* ===================================== */
+
+
+/* =========== ТАСК "HTML" ============= */
+
+// Сборка HTML
+gulp.task('html', function () {
+    console.log('---------- Сборка HTML');
+    return gulp.src(cfg.paths.src.html)             // Выбираем файлы по нужному пути
+        .pipe(plumber(err))                         // Отслеживаем ошибки
+        .pipe(rigger())                             // Обьединяем HTML через rigger
+        .pipe(gulp.dest(cfg.paths.build.html))      // Копируем в папку назначения
+        .pipe(reload({stream: true}));              // Перезагружаем сервер
+});
+/* ===================================== */
+
+/* =========== ТАСК "PUG" ============= */
+
+// Компиляция pug/jade шаблонов
+gulp.task('pug', function () {
+    console.log('---------- Компиляция pug/jade шаблонов');
+    return gulp.src(cfg.paths.src.pug)             // Выбираем файлы по нужному пути
+        .pipe(plumber(err))                         // Отслеживаем ошибки
+        .pipe (pug(cfg.pug.pretty))
+        .pipe(rigger())                             // Обьединяем HTML через rigger
+        .pipe(gulp.dest(cfg.paths.build.html))      // Копируем в папку назначения
+        .pipe(reload({stream: true}));              // Перезагружаем сервер
+});
+/* ===================================== */
 
 

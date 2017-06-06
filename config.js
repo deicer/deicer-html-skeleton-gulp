@@ -20,8 +20,8 @@ module.exports = {
 
         // Папки и файлы исходников
         src: {
-            html:	 'src/*.html',
-            pug:	 'src/*.pug',
+            html:	 'src/pages/*.html',
+            pug:	 'src/pages/*.pug',
             js:		 'src/scripts/main.js',
             less:	 'src/styles/styles.less',
             scss:	 'src/styles/styles.scss',
@@ -33,8 +33,8 @@ module.exports = {
 
         // Файлы в которых отслеживаются изменения
         watch: {
-            html:	 'src/**/*.html',
-            pug:	 'src/**/*.pug',
+            html:	 'src/pages/**/*.html',
+            pug:	 'src/pages/**/*.pug',
             js:		 'src/scripts/**/*.js',
             less:	 'src/styles/**/*.less',
             scss:	 'src/styles/**/*.scss',
@@ -57,15 +57,17 @@ module.exports = {
     },
 
     // Настройки browserSync
-    browserSync: {
+    browserSync: { // Параметры локального сервера
         server: {
-            baseDir: this.build.html  // Корневая папка локального сервера
+            baseDir: './build'  // Корневая папка локального сервера
         },
         tunnel: false,
         host: 'localhost',
         port: 9000,                   // Порт локального сервера
         logPrefix: 'frontend',
-        open: false
+        logLevel: "info",
+        online: true,
+        open: true                    // Открывать в браузере автоматически?
     },
 
     // Настройки по умолчанию (для разработки)
@@ -73,7 +75,10 @@ module.exports = {
         css: false,
         js: false,
         img: true
+    },
+
+    // Настройки pug
+    pug: {
+        pretty: true
     }
-
-
 };

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/deicer/deicer-html-skeleton-gulp#readme",
   "dependencies": {
+    "bootstrap": "4",
     "browser-sync": "^2.18.12",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
@@ -42,6 +43,7 @@
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
     "imagemin-pngquant": "^5.0.1",
+    "jquery": "^3.2.1",
     "node-sass": "^4.5.3",
     "path": "^0.12.7",
     "vinyl-ftp": "^0.6.0",

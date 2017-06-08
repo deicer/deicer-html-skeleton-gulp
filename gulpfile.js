@@ -170,56 +170,98 @@ var gulp         = require('gulp'),                         // gulp
 
 /* ============ ТАСК "JS" =========================================================================================== */
 
+    // Сборка javascript
     gulp.task('js', function() {
         console.log('---------- Сборка JavaScript');
-        return gulp.src(cfg.paths.src.js)                               // Выбираем основной файл javascript
-            .pipe(plumber(err))                                         // Отслеживаем ошибки
-            .pipe(rigger())                                             // Используем rigger если нужно для js Файлов
-            .pipe(gulpif(production,uglify()))                          // Минифицируем JS если Production
-            .pipe(rename(cfg.names.js))                                 // Переименовываем
-            .pipe(gulp.dest(cfg.paths.build.js))                        // Выгружаем результат
-            .pipe(reload({stream: true}));                              //Перезагружаем сервер
+        return gulp.src(cfg.paths.src.js)                             // Выбираем основной файл javascript
+            .pipe(plumber(err))                                       // Отслеживаем ошибки
+            .pipe(rigger())                                           // Используем rigger если нужно для js Файлов
+            .pipe(gulpif(production,uglify()))                        // Минифицируем JS если Production
+            .pipe(rename(cfg.names.js))                               // Переименовываем
+            .pipe(gulp.dest(cfg.paths.build.js))                      // Выгружаем результат
+            .pipe(reload({stream: true}));                            //Перезагружаем сервер
     });
 /* ================================================================================================================== */
 
 
 /* ============ ТАСК "IMAGE" ======================================================================================== */
 
+    // Обработка изображений
     gulp.task('img', function() {
         console.log('---------- Обработка изображений');
-        return gulp.src(cfg.paths.src.img)                              // Берём все изображения
-            .pipe(plumber(err))                                         // Отслеживаем ошибки
-            .pipe(newer(cfg.paths.build.img))                           // Обрабатываем только изменившиеся
-            .pipe(imagemin({                                            // Оптимизируем изображения
+        return gulp.src(cfg.paths.src.img)                            // Берём все изображения
+            .pipe(plumber(err))                                       // Отслеживаем ошибки
+            .pipe(newer(cfg.paths.build.img))                         // Обрабатываем только изменившиеся
+            .pipe(imagemin({                                          // Оптимизируем изображения
                 interlaced: true,
                 progressive: true,
                 svgoPlugins: [{removeViewBox: false}],
-                use: [pngquant()]                                       // Дополнительно оптимизируем png
+                use: [pngquant()]                                     // Дополнительно оптимизируем png
             }))
-            .pipe(gulp.dest(cfg.paths.build.img))                       // Выгружаем результат
-            .pipe(reload({stream: true}));                              //Перезагружаем сервер
+            .pipe(gulp.dest(cfg.paths.build.img))                     // Выгружаем результат
+            .pipe(reload({stream: true}));                            //Перезагружаем сервер
     });
 /* ================================================================================================================== */
 
 
 /* ============ ТАСК "FONTS" ======================================================================================== */
 
+    // Копирование шрифтов
     gulp.task('fonts', function() {
-        return gulp.src(cfg.paths.src.fonts)                            // Берём шрифты
-            .pipe(gulp.dest(cfg.paths.build.fonts))                            // Выгружаем на продакшн
-            .pipe(reload({stream: true}));                              //Перезагружаем сервер
+        console.log('---------- Копирование шрифтов');
+        return gulp.src(cfg.paths.src.fonts)                          // Берём шрифты
+            .pipe(gulp.dest(cfg.paths.build.fonts))                   // Выгружаем на продакшн
+            .pipe(reload({stream: true}));                            //Перезагружаем сервер
     });
 /* ================================================================================================================== */
 
 
 /* ============ ТАСК "BUILD" ======================================================================================== */
 
+    // Сборка всех исходных файлов
     gulp.task('build', [
         'clean',
         'html',
         'js',
         'fonts',
-        'img','css'
-]
-
+        'img'
+        ],
+        function () { // Запуск опциональных задач
+            if (cfg.use.less){
+                gulp.run('less');
+            }
+            if (cfg.use.sass){
+                gulp.run('sass');
+            }
+            if (cfg.use.pug){
+                gulp.run('pug');
+            }}
     );
+/* ================================================================================================================== */
+
+/* ============ ТАСК "WATCH" ======================================================================================== */
+
+    // Наблюдение за изменяющимися файлами
+    gulp.task('watch', function() {
+        watch([cfg.paths.watch.html],function (event,cb) {
+            gulp.start('html');
+        }); // Наблюдение за HTML файлами
+        watch([cfg.paths.watch.js],function (event,cb) {
+            gulp.start('js');
+        }); // Наблюдение за JS файлами
+        watch([cfg.paths.watch.fonts],function (event,cb) {
+            gulp.start('fonts');
+        }); // Наблюдение за шрифтами
+        watch([cfg.paths.watch.img],function (event,cb) {
+            gulp.start('img');
+        }); // Наблюдение за изображениями
+        watch([cfg.paths.watch.sass],function (event,cb) {
+            gulp.start('sass');
+        }); // Наблюдение за sass-файлами
+        watch([cfg.paths.watch.less],function (event,cb) {
+            gulp.start('less');
+        }); // Наблюдение за less-файлами
+        watch([cfg.paths.watch.pug],function (event,cb) {
+            gulp.start('pug');
+        }); // Наблюдение за pug-файлами
+});

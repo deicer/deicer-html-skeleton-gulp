@@ -19,7 +19,7 @@
     "url": "https://github.com/deicer/deicer-html-skeleton-gulp/issues"
   },
   "homepage": "https://github.com/deicer/deicer-html-skeleton-gulp#readme",
-  "dependencies": {
+  "devDependencies": {
     "bootstrap": "4.0.0-alpha.6",
     "browser-sync": "^2.18.12",
     "del": "^2.2.2",

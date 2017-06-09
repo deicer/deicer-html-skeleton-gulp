@@ -42,7 +42,7 @@ module.exports = {
             pug: 'src/pages/*.pug',
             js: 'src/scripts/main.js', // В стилях и скриптах нам понадобятся только один исходный файлы
             less: 'src/styles/styles.less',
-            scss: 'src/styles/styles.scss',
+            sass: 'src/styles/styles.scss',
             img: 'src/images/**/*.*', // img/**/*.*  - взять все файлы всех расширений из папки и из вложенных папок
             fonts: 'src/fonts/**/*.*',
             sprites: 'src/images/sprites/*.png',
@@ -55,7 +55,7 @@ module.exports = {
             pug: 'src/pages/**/*.pug',
             js: 'src/scripts/**/*.js',
             less: 'src/styles/**/*.less',
-            scss: 'src/styles/**/*.scss',
+            sass: 'src/styles/**/*.scss',
             img: 'src/images/**/*.*',
             fonts: 'src/fonts/**/*.*',
             sprites: 'src/images/sprites/*.png',

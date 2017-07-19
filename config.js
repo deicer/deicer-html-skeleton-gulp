@@ -41,6 +41,9 @@ module.exports = {
             html: 'src/pages/*.html', //  "*.html" говорит gulp что мы хотим взять все файлы с расширением .html
             pug: 'src/pages/*.pug',
             js: 'src/scripts/main.js', // В стилях и скриптах нам понадобятся только один исходный файлы
+            jslibs: [ // Подключаемые библиотеки. Порядок подключения имеет значение!
+                'node_modules/jquery/dist/jquery.js'
+            ],
             less: 'src/styles/styles.less',
             sass: 'src/styles/styles.scss',
             img: 'src/images/**/*.*', // img/**/*.*  - взять все файлы всех расширений из папки и из вложенных папок
